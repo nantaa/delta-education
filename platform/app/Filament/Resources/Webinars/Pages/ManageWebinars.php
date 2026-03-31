@@ -3,17 +3,17 @@
 namespace App\Filament\Resources\Webinars\Pages;
 
 use App\Filament\Resources\Webinars\WebinarResource;
-use Filament\Actions\DeleteAction;
-use Filament\Resources\Pages\EditRecord;
+use Filament\Actions\CreateAction;
+use Filament\Resources\Pages\ManageRecords;
 
-class EditWebinar extends EditRecord
+class ManageWebinars extends ManageRecords
 {
     protected static string $resource = WebinarResource::class;
 
     protected function getHeaderActions(): array
     {
         return [
-            DeleteAction::make(),
+            CreateAction::make(),
         ];
     }
 }
