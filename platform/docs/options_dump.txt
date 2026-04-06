@@ -1,0 +1,135 @@
+﻿JOB:value|label
+JOB:159|2D/3D Artist
+JOB:67|Akuntan
+JOB:139|Android Developer
+JOB:50|Anggota BPK
+JOB:49|Anggota DPD
+JOB:48|Anggota DPR-RI
+JOB:60|Anggota DPRD Kabupaten/Kota
+JOB:59|Anggota DPRD Provinsi
+JOB:53|Anggota Kabinet/Kementerian
+JOB:52|Anggota Mahkamah Konstitusi
+JOB:72|Apoteker
+JOB:66|Arsitek
+JOB:129|Back-End Developer
+JOB:1|Belum/Tidak Bekerja
+JOB:84|Biarawati
+JOB:70|Bidan
+JOB:57|Bupati
+JOB:19|Buruh Harian Lepas
+JOB:21|Buruh Nelayan/Perikanan
+JOB:22|Buruh Peternakan
+JOB:20|Buruh Tani/Perkebunan
+JOB:259|Chief Accountant Officers (CAO)
+JOB:229|Chief Executive Officers (CEO)
+JOB:264|Chief Financial Officers (CFO)
+JOB:234|Chief Information Officers (CIO)
+JOB:254|Chief Marketing Officers (CMO)
+JOB:249|Chief Operating Officers (COO)
+JOB:244|Chief Product Officer (CPO)
+JOB:239|Chief Technical Officers (CTO)
+JOB:194|Cloud Engineer
+JOB:224|Data Analyst
+JOB:214|Data Engineer
+JOB:219|Data Scientist
+JOB:164|Database Administration
+JOB:209|DevOps
+JOB:69|Dokter
+JOB:61|Dosen
+JOB:54|Duta Besar
+JOB:124|Front-End Developer
+JOB:119|Full-Stack Developer
+JOB:149|Game Designer
+JOB:144|Game Developer
+JOB:154|Game Tester
+JOB:55|Gubernur
+JOB:62|Guru
+JOB:189|Hardware Engineer
+JOB:41|Imam Mesjid
+JOB:12|Industri
+JOB:46|Juru Masak
+JOB:17|Karyawan BUMD
+JOB:16|Karyawan BUMN
+JOB:18|Karyawan Honorer
+JOB:15|Karyawan Swasta
+JOB:83|Kepala Desa
+JOB:7|Kepolisian RI
+JOB:13|Konstruksi
+JOB:68|Konsultan
+JOB:88|Lainnya
+JOB:35|Mekanik
+JOB:2|Mengurus Rumah Tangga
+JOB:134|Mobile Apps Developer
+JOB:11|Nelayan/Perikanan
+JOB:199|Network Engineer
+JOB:65|Notaris
+JOB:38|Paraji
+JOB:80|Paranormal
+JOB:43|Pastor
+JOB:81|Pedagang
+JOB:5|Pegawai Negeri Sipil
+JOB:87|Pekerja Lepas / Freelance
+JOB:3|Pelajar/Mahasiswa
+JOB:76|Pelaut
+JOB:23|Pembantu Rumah Tangga
+JOB:33|Penata Busana
+JOB:34|Penata Rambut
+JOB:32|Penata Rias
+JOB:42|Pendeta
+JOB:77|Peneliti
+JOB:64|Pengacara
+JOB:4|Pensiunan
+JOB:40|Penterjemah
+JOB:75|Penyiar Radio
+JOB:74|Penyiar Televisi
+JOB:39|Perancang Busana
+JOB:82|Perangkat Desa
+JOB:71|Perawat
+JOB:8|Perdagangan
+JOB:9|Petani/Pekebun
+JOB:10|Peternak
+JOB:79|Pialang
+JOB:63|Pilot
+JOB:94|Programmer
+JOB:47|Promotor Acara
+JOB:73|Psikiater/Psikolog
+JOB:179|Quality Assurance (QA)
+JOB:184|Security Engineer
+JOB:36|Seniman
+JOB:204|Site Reliability Engineer (SRE)
+JOB:89|Software Engineer
+JOB:78|Sopir
+JOB:169|System Analyst
+JOB:37|Tabib
+JOB:6|Tentara Nasional Indonesia
+JOB:14|Transportasi
+JOB:26|Tukang Batu
+JOB:24|Tukang Cukur
+JOB:31|Tukang Gigi
+JOB:30|Tukang Jahit
+JOB:27|Tukang Kayu
+JOB:29|Tukang Las/Pandai Besi
+JOB:25|Tukang Listrik
+JOB:28|Tukang Sol Sepatu
+JOB:174|UI/UX Designer
+JOB:45|Ustadz/Mubaligh
+JOB:56|Wakil Gubernur
+JOB:51|Wakil Presiden
+JOB:58|Walikota
+JOB:44|Wartawan
+JOB:109|Web Designer
+JOB:99|Web Developer
+JOB:114|Web Engineer
+JOB:104|Web Programmer
+JOB:85|Wiraswasta
+JOB:86|Wirausaha/Entrepreneur/Founder
+SRC:id|source
+SRC:1|Teman/Relasi/Kerabat
+SRC:2|Media Sosial Delta Indonesia
+SRC:3|Newsletter Delta Indonesia
+SRC:4|Website Delta Indonesia
+SRC:5|WhatsApp/SMS Broadcast
+SRC:6|Facebook/Instagram Ads
+SRC:7|Berita/Press Release
+SRC:8|KoL/Influencer
+SRC:9|Lainnya

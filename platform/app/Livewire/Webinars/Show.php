@@ -6,7 +6,7 @@ use Livewire\Component;
 use App\Models\Webinar;
 use Livewire\Attributes\Layout;
 
-#[Layout('layouts.app')]
+#[Layout('layouts.public')]
 class Show extends Component
 {
     public Webinar $webinar;

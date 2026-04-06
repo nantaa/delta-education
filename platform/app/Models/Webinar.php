@@ -19,14 +19,16 @@ class Webinar extends Model
         'capacity',
         'zoom_link',
         'status',
+        'poster',
     ];
 
     protected $casts = [
         'scheduled_at' => 'datetime',
     ];
 
-    public function registrations()
+
+    public function participants()
     {
-        return $this->hasMany(Registration::class);
+        return $this->morphMany(Participant::class, 'participatable');
     }
 }

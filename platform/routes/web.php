@@ -3,9 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', \App\Livewire\LandingPage::class)->name('home');
 
 Route::get('/webinars', \App\Livewire\Webinars\Index::class)->name('webinars.index');
 Route::get('/webinars/{slug}', \App\Livewire\Webinars\Show::class)->name('webinars.show');

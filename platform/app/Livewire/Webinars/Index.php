@@ -6,7 +6,7 @@ use Livewire\Component;
 use App\Models\Webinar;
 use Livewire\Attributes\Layout;
 
-#[Layout('layouts.app')]
+#[Layout('layouts.public')]
 class Index extends Component
 {
     public function render()

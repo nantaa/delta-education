@@ -4,11 +4,9 @@ namespace App\Listeners;
 
 use App\Events\OrderPaid;
 use App\Models\Webinar;
-use App\Models\Product;
-use App\Models\Registration;
+use App\Models\Participant;
 use App\Jobs\SendRegistrationConfirmation;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Log;
 
 class HandleOrderPaid implements ShouldQueue
@@ -19,26 +17,32 @@ class HandleOrderPaid implements ShouldQueue
 
         foreach ($order->items as $item) {
             if ($item->productable_type === Webinar::class) {
-                
-                // Ensure no duplicates
-                $exists = Registration::where('webinar_id', $item->productable_id)
+                $webinar = Webinar::find($item->productable_id);
+                if (! $webinar) {
+                    continue;
+                }
+
+                // Avoid duplicate participants
+                $exists = $webinar->participants()
                     ->where('email', $order->customer_email)
                     ->exists();
 
-                if (!$exists) {
-                    $registration = Registration::create([
-                        'webinar_id' => $item->productable_id,
-                        'name' => $order->customer_name,
-                        'email' => $order->customer_email,
-                        'phone' => $order->customer_phone,
+                if (! $exists) {
+                    $participant = $webinar->participants()->create([
+                        'name'           => $order->customer_name,
+                        'email'          => $order->customer_email,
+                        'whatsapp_number'=> $order->customer_phone,
+                        'payment_status' => 'settlement',
+                        'payment_method' => 'midtrans',
+                        'amount_paid'    => $item->price,
+                        'privacy_consent'=> true,
                     ]);
 
-                    SendRegistrationConfirmation::dispatch($registration);
+                    SendRegistrationConfirmation::dispatch($participant);
                 }
-
-            } elseif ($item->productable_type === Product::class) {
-                // Phase 4 functionality: Grant Ebook access
-                Log::info("Ebook access granted for User/Email {$order->customer_email} - Product {$item->productable_id}");
+            } else {
+                // Ebooks / mini-courses: Phase 6 (grant access)
+                Log::info("Ebook/product access pending — email {$order->customer_email}, product {$item->productable_id}");
             }
         }
     }

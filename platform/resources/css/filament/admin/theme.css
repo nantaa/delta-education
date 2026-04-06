@@ -1,0 +1,16 @@
+@import '/vendor/filament/filament/resources/css/theme.css';
+
+/* Force light mode — override any dark-mode defaults */
+:root,
+.fi-body,
+[data-theme],
+html {
+    color-scheme: light !important;
+}
+
+/* Prevent dark-mode media query from activating Filament dark styles */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --fi-color-gray-950: 255 255 255;
+    }
+}

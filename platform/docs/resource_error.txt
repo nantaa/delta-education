@@ -1,0 +1,45 @@
+﻿
+   Symfony\Component\ErrorHandler\Error\FatalError 
+
+  Type of App\Filament\Resources\Participants\ParticipantResource::$navigationGroup must be UnitEnum|string|null (as in class Filament\Resources\Resource)
+
+  at app\Filament\Resources\Participants\ParticipantResource.php:27
+     23Γûò use Filament\Tables\Columns\TextColumn;
+     24Γûò use Filament\Tables\Filters\SelectFilter;
+     25Γûò use Filament\Tables\Table;
+     26Γûò 
+  Γ₧£  27Γûò class ParticipantResource extends Resource
+     28Γûò {
+     29Γûò     protected static ?string $model = Participant::class;
+     30Γûò 
+     31Γûò     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedUsers;
+
+  1   vendor\laravel\framework\src\Illuminate\Foundation\Bootstrap\HandleExceptions.php:247
+      Symfony\Component\ErrorHandler\Error\FatalError::__construct("'Type of App\\Filament\\Resources\\Participants\\ParticipantResource::$navigationGroup must be UnitEnum|string|null (as in class Filament\\Resources\\Resource)'", "0", "['type' => 64, 'message' => 'Type of App\\Filament\\Resources\\Participants\\ParticipantResource::$navigationGroup must be UnitEnum|string|null (as in class Filament\\Resources\\Resource)', 'file' => 'C:\\wamp64\\www\\e-course_delta\\platform\\app\\Filament\\Resources\\Participants\\ParticipantResource.php', 'line' => 27]", "0", "???", "???")
+
+  2   vendor\laravel\framework\src\Illuminate\Foundation\Bootstrap\HandleExceptions.php:234
+      Illuminate\Foundation\Bootstrap\HandleExceptions::fatalErrorFromPhpError("['type' => 64, 'message' => 'Type of App\\Filament\\Resources\\Participants\\ParticipantResource::$navigationGroup must be UnitEnum|string|null (as in class Filament\\Resources\\Resource)', 'file' => 'C:\\wamp64\\www\\e-course_delta\\platform\\app\\Filament\\Resources\\Participants\\ParticipantResource.php', 'line' => 27]", "0")
+
+
+   Whoops\Exception\ErrorException 
+
+  Type of App\Filament\Resources\Participants\ParticipantResource::$navigationGroup must be UnitEnum|string|null (as in class Filament\Resources\Resource)
+
+  at app\Filament\Resources\Participants\ParticipantResource.php:27
+     23Γûò use Filament\Tables\Columns\TextColumn;
+     24Γûò use Filament\Tables\Filters\SelectFilter;
+     25Γûò use Filament\Tables\Table;
+     26Γûò 
+  Γ₧£  27Γûò class ParticipantResource extends Resource
+     28Γûò {
+     29Γûò     protected static ?string $model = Participant::class;
+     30Γûò 
+     31Γûò     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedUsers;
+
+  1   vendor\filp\whoops\src\Whoops\Run.php:520
+      Whoops\Run::handleError("Type of App\Filament\Resources\Participants\ParticipantResource::$navigationGroup must be UnitEnum|string|null (as in class Filament\Resources\Resource)", "C:\wamp64\www\e-course_delta\platform\app\Filament\Resources\Participants\ParticipantResource.php")
+
+  2   [internal]:0
+      Whoops\Run::handleShutdown()
+
+
