@@ -9,6 +9,8 @@ Route::get('/webinars', \App\Livewire\Webinars\Index::class)->name('webinars.ind
 Route::get('/webinars/{slug}', \App\Livewire\Webinars\Show::class)->name('webinars.show');
 Route::get('/checkout/{type}/{slug}', \App\Livewire\Checkout::class)->name('checkout');
 
+Route::get('/pelatihan/{slug}', \App\Livewire\TrainingsShow::class)->name('trainings.show');
+Route::get('/checkout/pelatihan/{slug}', \App\Livewire\TrainingCheckout::class)->name('checkout.training');
 Route::post('/webhook/midtrans', [\App\Http\Controllers\Webhook\MidtransController::class, 'handle']);
 
 Route::get('/dashboard', function () {

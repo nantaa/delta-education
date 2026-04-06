@@ -9,10 +9,17 @@ use Livewire\Component;
 class LandingPage extends Component
 {
     public Collection $webinars;
+    public Collection $trainings;
 
     public function mount(): void
     {
         $this->webinars = Webinar::query()
+            ->where('status', 'published')
+            ->where('scheduled_at', '>=', now())
+            ->orderBy('scheduled_at')
+            ->get();
+
+        $this->trainings = \App\Models\Training::query()
             ->where('status', 'published')
             ->where('scheduled_at', '>=', now())
             ->orderBy('scheduled_at')

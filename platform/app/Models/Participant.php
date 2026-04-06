@@ -4,7 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 
 class Participant extends Model
 {
@@ -18,6 +19,7 @@ class Participant extends Model
         'employment_status', 'current_job', 'company',
         'event_source', 'privacy_consent',
         'payment_method', 'transaction_id', 'payment_status', 'amount_paid',
+        'discount_code_id', 'discount_amount',
     ];
 
     protected $casts = [
@@ -31,40 +33,27 @@ class Participant extends Model
         return $this->morphTo();
     }
 
-    // ─── Static option helpers ─────────────────────────────────────────────────
+    // ─── Static option helpers (read from DB options table) ───────────────────
 
     public static function jobOptions(): array
     {
-        static $cache = null;
-        $cache ??= self::loadExcelOptions(base_path('docs/job_options.xlsx'));
-        return $cache;
+        return Cache::remember('options.job', 3600, function () {
+            return DB::table('options')
+                ->where('type', 'job')
+                ->orderBy('label')
+                ->pluck('label', 'value')
+                ->toArray();
+        });
     }
 
     public static function sourceOptions(): array
     {
-        static $cache = null;
-        $cache ??= self::loadExcelOptions(base_path('docs/source_options.xlsx'));
-        return $cache;
-    }
-
-    private static function loadExcelOptions(string $path): array
-    {
-        if (! file_exists($path)) {
-            return [];
-        }
-        try {
-            $reader = new Xlsx();
-            $reader->setReadDataOnly(true);
-            $rows = $reader->load($path)->getActiveSheet()->toArray();
-            $result = [];
-            foreach (array_slice($rows, 1) as $row) {
-                if (! empty($row[1])) {
-                    $result[(string) $row[0]] = (string) $row[1];
-                }
-            }
-            return $result;
-        } catch (\Throwable) {
-            return [];
-        }
+        return Cache::remember('options.source', 3600, function () {
+            return DB::table('options')
+                ->where('type', 'source')
+                ->orderBy('sort_order')
+                ->pluck('label', 'value')
+                ->toArray();
+        });
     }
 }
