@@ -40,6 +40,7 @@
                 <nav class="hidden md:flex items-center gap-6 text-sm text-[#706f6c]">
                     <a href="{{ route('home') }}" class="hover:text-[#1b1b18] transition-colors">Beranda</a>
                     <a href="{{ route('webinars.index') }}" class="hover:text-[#1b1b18] transition-colors">Webinar</a>
+                    <a href="/pelatihan" class="hover:text-[#1b1b18] transition-colors">Pelatihan K3</a>
                 </nav>
 
                 <div class="flex items-center gap-2">
@@ -74,6 +75,7 @@
             </p>
             <nav class="flex items-center gap-4 text-xs text-[#706f6c]">
                 <a href="{{ route('webinars.index') }}" class="hover:text-[#1b1b18] transition-colors">Webinar</a>
+                <a href="/pelatihan" class="hover:text-[#1b1b18] transition-colors">Pelatihan K3</a>
                 <a href="{{ route('login') }}" class="hover:text-[#1b1b18] transition-colors">Masuk</a>
             </nav>
         </div>

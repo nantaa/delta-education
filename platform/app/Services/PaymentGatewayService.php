@@ -19,7 +19,16 @@ class PaymentGatewayService
         // Set sanitization on (default)
         Config::$isSanitized = true;
         // Set 3DS transaction for credit card to true
+        // Set 3DS transaction for credit card to true
         Config::$is3ds = true;
+        
+        // Skip SSL cert verification for local dev ease (WAMP/XAMPP issue)
+        // Also define CURLOPT_HTTPHEADER to prevent PHP 8 'Undefined array key 10023' error in Midtrans ApiRequestor
+        Config::$curlOptions = [
+            CURLOPT_SSL_VERIFYHOST => 0,
+            CURLOPT_SSL_VERIFYPEER => 0,
+            CURLOPT_HTTPHEADER => [],
+        ];
     }
 
     /**

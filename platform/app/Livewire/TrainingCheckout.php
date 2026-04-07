@@ -18,10 +18,11 @@ class TrainingCheckout extends Component
     // Core details
     public string $name = '';
     public string $email = '';
-    public string $phone = ''; // Maps to whatsapp_number
+    public string $phone = '';
 
     public string $discount_code = '';
-    public ?DiscountCode $appliedDiscount = null;
+    /** Store only the ID to avoid Livewire serialisation issues */
+    public ?int $appliedDiscountId = null;
 
     public bool $privacy_consent = false;
 
@@ -31,55 +32,97 @@ class TrainingCheckout extends Component
     public bool $success = false;
 
     public float $effectivePrice = 0;
+    public float $originalPrice  = 0;
 
-    protected function rules()
+    protected function rules(): array
     {
         return [
             'name'            => 'required|min:3|max:191',
-            'email'           => 'required|email|max:191|unique:participants,email,NULL,id,participatable_id,' . $this->training->id . ',participatable_type,' . Training::class,
+            'email'           => 'required|email|max:191',
             'phone'           => 'required|numeric|min_digits:9|max_digits:15',
             'privacy_consent' => 'accepted',
         ];
     }
 
     protected $messages = [
-        'email.unique'             => 'Email ini sudah terdaftar untuk pelatihan ini.',
         'privacy_consent.accepted' => 'Anda harus menyetujui kebijakan privasi.',
     ];
 
-    public function mount($slug)
+    public function mount(string $slug): void
     {
-        $this->training = Training::where('slug', $slug)->firstOrFail();
-        $this->effectivePrice = $this->training->price;
-        $this->isFree = $this->effectivePrice <= 0;
+        $this->training      = Training::where('slug', $slug)->firstOrFail();
+        $this->originalPrice = (float) $this->training->price;
+        $this->effectivePrice = $this->originalPrice;
+        $this->isFree        = $this->effectivePrice <= 0;
     }
 
-    public function updatedDiscountCode()
+    /** Resolved lazily so we always have fresh data */
+    public function getAppliedDiscountProperty(): ?DiscountCode
+    {
+        return $this->appliedDiscountId
+            ? DiscountCode::find($this->appliedDiscountId)
+            : null;
+    }
+
+    public function applyDiscount(): void
     {
         $this->discount_code = strtoupper(trim($this->discount_code));
+
+        if ($this->discount_code === '') {
+            $this->resetDiscount();
+            return;
+        }
+
         $code = DiscountCode::where('code', $this->discount_code)->first();
 
         if ($code && $code->isValid()) {
-            $this->appliedDiscount = $code;
-            $this->effectivePrice = $code->calculateDiscount($this->training->price);
-            $this->isFree = $this->effectivePrice <= 0;
+            $this->appliedDiscountId = $code->id;
+            $this->effectivePrice    = $code->calculateDiscount($this->originalPrice);
+            $this->isFree            = $this->effectivePrice <= 0;
             session()->flash('discount_success', 'Kode diskon berhasil diaplikasikan!');
         } else {
-            $this->appliedDiscount = null;
-            $this->effectivePrice = $this->training->price;
-            $this->isFree = $this->effectivePrice <= 0;
-            if ($this->discount_code !== '') {
-                session()->flash('discount_error', 'Kode diskon tidak valid atau telah kedaluwarsa.');
-            }
+            $this->resetDiscount();
+            session()->flash('discount_error', 'Kode diskon tidak valid atau telah kedaluwarsa.');
         }
     }
 
-    public function submit()
+    private function resetDiscount(): void
+    {
+        $this->appliedDiscountId = null;
+        $this->effectivePrice    = $this->originalPrice;
+        $this->isFree            = $this->effectivePrice <= 0;
+    }
+
+    public function submit(): void
     {
         $this->validate();
 
-        // Safety check to re-calculate discount just before submit
-        $this->updatedDiscountCode();
+        // Guard: re-validate duplicate email for this training
+        $alreadyRegistered = Participant::where('participatable_id', $this->training->id)
+            ->where('participatable_type', Training::class)
+            ->where('email', $this->email)
+            ->exists();
+
+        if ($alreadyRegistered) {
+            $this->addError('email', 'Email ini sudah terdaftar untuk pelatihan ini.');
+            return;
+        }
+
+        // Guard: capacity check
+        if ($this->training->participants()->count() >= $this->training->capacity) {
+            session()->flash('error', 'Maaf, kuota pelatihan ini sudah penuh.');
+            return;
+        }
+
+        // Re-validate discount freshness
+        $discount = $this->appliedDiscountId ? DiscountCode::find($this->appliedDiscountId) : null;
+        if ($discount && $discount->isValid()) {
+            $this->effectivePrice = $discount->calculateDiscount($this->originalPrice);
+            $this->isFree         = $this->effectivePrice <= 0;
+        } else {
+            $this->resetDiscount();
+            $discount = null;
+        }
 
         $participant = new Participant([
             'name'            => $this->name,
@@ -88,49 +131,59 @@ class TrainingCheckout extends Component
             'privacy_consent' => $this->privacy_consent,
             'payment_status'  => $this->isFree ? 'settlement' : 'pending',
             'amount_paid'     => $this->effectivePrice,
+            'discount_code_id' => $discount?->id,
+            'discount_amount'  => $discount ? ($this->originalPrice - $this->effectivePrice) : null,
         ]);
 
-        if ($this->appliedDiscount) {
-            $participant->discount_code_id = $this->appliedDiscount->id;
-            $participant->discount_amount = $this->training->price - $this->effectivePrice;
-            
-            // Increment usage limit for the discount code
-            $this->appliedDiscount->increment('used_count');
-        }
-
         $this->training->participants()->save($participant);
+
+        if ($discount) {
+            $discount->increment('used_count');
+        }
 
         if ($this->isFree) {
             $this->success = true;
             return;
         }
 
-        // Create Order for tracking and Midtrans
+        // Create Order for Midtrans
         $order = Order::create([
-            'order_type'    => 'training',
-            'order_number'  => 'TRN-' . strtoupper(uniqid()),
-            'name'          => $this->name,
-            'email'         => $this->email,
-            'phone'         => $this->phone,
-            'total_amount'  => $this->effectivePrice,
-            'status'        => 'pending',
+            'customer_name'  => $this->name,
+            'customer_email' => $this->email,
+            'customer_phone' => $this->phone,
+            'total_amount'   => $this->effectivePrice,
+            'status'         => 'pending',
+            'payment_method' => 'midtrans_snap',
         ]);
 
         $order->items()->create([
-            'purchasable_id'   => $this->training->id,
-            'purchasable_type' => Training::class,
+            'productable_id'   => $this->training->id,
+            'productable_type' => Training::class,
             'item_name'        => $this->training->title,
             'price'            => $this->effectivePrice,
-            'quantity'         => 1,
         ]);
 
-        $participant->update([
-            'transaction_id' => $order->order_number
-        ]);
+        $participant->update(['transaction_id' => (string) $order->id]);
 
         $paymentGateway = new PaymentGatewayService();
-        $this->snapToken = $paymentGateway->getSnapToken($order);
+        $snapToken = $paymentGateway->getSnapToken($order);
 
-        $this->dispatch('open-snap', token: $this->snapToken);
+        if ($snapToken) {
+            $this->snapToken = $snapToken;
+            $this->dispatch('open-snap', token: $snapToken);
+        } else {
+            session()->flash('error', 'Gagal menginisiasi pembayaran. Silakan coba lagi.');
+        }
+    }
+
+    public function handlePaymentSuccess()
+    {
+        $this->success = true;
+        // Optionally flash a message or perform additional checks
+    }
+
+    public function render()
+    {
+        return view('livewire.training-checkout');
     }
 }

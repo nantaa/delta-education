@@ -17,10 +17,24 @@
                     </svg>
                 </div>
                 <h2 class="text-2xl font-bold text-gray-900 tracking-tight mb-2">Pendaftaran Berhasil!</h2>
-                <p class="text-gray-600 mb-6 max-w-sm mx-auto">Terima kasih telah mendaftar. Data pendaftaran Anda telah kami rekam.</p>
-                <a href="{{ route('home') }}" class="inline-block bg-black text-white px-6 py-2.5 rounded-sm font-medium hover:bg-gray-800 transition-colors">
-                    Kembali ke Beranda
-                </a>
+                <p class="text-gray-600 mb-6 max-w-sm mx-auto">Terima kasih telah mendaftar. Pembayaran Anda telah kami rekam.</p>
+                
+                @if($training->link_forwarder)
+                    <div class="mb-8 p-4 bg-white border border-gray-200 rounded-md inline-block text-left w-full max-w-sm">
+                        <p class="text-sm font-semibold text-gray-900 mb-2">Langkah Selanjutnya:</p>
+                        <p class="text-xs text-gray-600 mb-4">Silakan isi formulir pendaftaran lengkap melalui link eksternal berikut untuk menyelesaikan proses Anda.</p>
+                        <a href="{{ $training->link_forwarder }}" target="_blank" class="flex items-center justify-center gap-2 bg-black text-white px-4 py-2.5 rounded-sm font-medium hover:bg-gray-800 transition-colors w-full">
+                            <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
+                            Isi Formulir Lengkap
+                        </a>
+                    </div>
+                @endif
+
+                <div class="mt-2">
+                    <a href="{{ route('home') }}" class="inline-block bg-black text-white px-6 py-2.5 rounded-sm font-medium hover:bg-gray-800 transition-colors">
+                        Kembali ke Beranda
+                    </a>
+                </div>
             </div>
         @else
 
@@ -70,7 +84,7 @@
                             <label class="block text-sm font-medium text-gray-700 mb-1.5">Punya kode promo/diskon? (Opsional)</label>
                             <div class="flex gap-2">
                                 <input type="text" wire:model="discount_code" class="block w-full uppercase border-gray-300 rounded-sm shadow-sm focus:border-black focus:ring-black text-sm" placeholder="Masukkan kode">
-                                <button type="button" wire:click="updatedDiscountCode" class="border border-[#19140035] bg-[#f5f5f3] px-4 rounded-sm text-sm font-medium hover:bg-gray-200 transition-colors">Terapkan</button>
+                                <button type="button" wire:click="applyDiscount" class="border border-[#19140035] bg-[#f5f5f3] px-4 rounded-sm text-sm font-medium hover:bg-gray-200 transition-colors">Terapkan</button>
                             </div>
                             
                             @if (session()->has('discount_success'))
@@ -86,6 +100,16 @@
                     
                     {{-- Rekap --}}
                     <div class="bg-[#fcfcfb] -mx-6 md:-mx-8 -my-6 p-6 md:p-8 mt-4 border-t border-[#e3e3e0]">
+                        @if (session()->has('error'))
+                            <div class="mb-6 p-4 rounded-md bg-red-50 border border-red-200 flex items-start gap-3">
+                                <svg class="h-5 w-5 text-red-500 mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                <div>
+                                    <h3 class="text-sm font-semibold text-red-800">Pembayaran Gagal Diinisiasi</h3>
+                                    <p class="text-sm text-red-700 mt-1">{{ session('error') }}</p>
+                                </div>
+                            </div>
+                        @endif
+
                         <div class="mb-6 flex gap-3 text-sm">
                             <input type="checkbox" wire:model="privacy_consent" id="privacy" class="mt-1 border-gray-300 rounded-sm text-black focus:ring-black">
                             <label for="privacy" class="text-gray-600 leading-relaxed cursor-pointer">
@@ -101,8 +125,8 @@
                                     <span class="text-2xl font-bold tracking-tight text-gray-900">
                                         {{ $effectivePrice > 0 ? 'Rp ' . number_format($effectivePrice, 0, ',', '.') : 'Gratis' }}
                                     </span>
-                                    @if($appliedDiscount && $training->price > 0)
-                                        <span class="text-sm text-gray-400 line-through">Rp {{ number_format($training->price, 0, ',', '.') }}</span>
+                                    @if($appliedDiscountId && $originalPrice > 0 && $effectivePrice < $originalPrice)
+                                        <span class="text-sm text-gray-400 line-through">Rp {{ number_format($originalPrice, 0, ',', '.') }}</span>
                                     @endif
                                 </div>
                             </div>
@@ -134,21 +158,13 @@
 
     @script
     <script>
-        $wire.on('open-snap', (event) => {
-            let token = event.token;
-            snap.pay(token, {
-                onSuccess: function(result) {
-                    window.location.href = '/checkout/success?order_id=' + result.order_id;
-                },
-                onPending: function(result) {
-                    window.location.href = '/checkout/pending?order_id=' + result.order_id;
-                },
-                onError: function(result) {
-                    alert("Pembayaran gagal!");
-                },
-                onClose: function() {
-                    alert('Anda menutup popup sebelum menyelesaikan pembayaran');
-                }
+        $wire.on('open-snap', (data) => {
+            let token = Array.isArray(data) ? data[0].token : data.token;
+            window.snap.pay(token, {
+                onSuccess: function() { @this.call('handlePaymentSuccess'); },
+                onPending: function() { @this.call('handlePaymentSuccess'); },
+                onError: function() { alert("Pembayaran gagal!"); },
+                onClose: function() { alert('Anda menutup popup sebelum menyelesaikan pembayaran'); }
             });
         });
     </script>

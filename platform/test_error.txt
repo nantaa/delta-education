@@ -1,0 +1,44 @@
+
+   Symfony\Component\ErrorHandler\Error\FatalError 
+
+  Could not check compatibility between App\Filament\Resources\DiscountCodes\DiscountCodeResource::form(Filament\Forms\Form $form): Filament\Forms\Form and Filament\Resources\Resource::form(Filament\Schemas\Schema $schema): Filament\Schemas\Schema, because class Filament\Forms\Form is not available
+
+  at app\Filament\Resources\DiscountCodes\DiscountCodeResource.php:28
+     24???     protected static ?string $pluralModelLabel = 'Daftar Kode Diskon';
+     25???     protected static string|\UnitEnum|null $navigationGroup = 'Manajemen Event';
+     26???     protected static ?int $navigationSort = 3;
+     27??? 
+  ???  28???     public static function form(Form $form): Form
+     29???     {
+     30???         return $form
+     31???             ->schema([
+     32???                 Forms\Components\TextInput::make('code')
+
+  1   vendor\laravel\framework\src\Illuminate\Foundation\Bootstrap\HandleExceptions.php:247
+      Symfony\Component\ErrorHandler\Error\FatalError::__construct("'Could not check compatibility between App\\Filament\\Resources\\DiscountCodes\\DiscountCodeResource::form(Filament\\Forms\\Form $form): Filament\\Forms\\Form and Filament\\Resources\\Resource::form(Filament\\Schemas\\Schema $schema): Filament\\Schemas\\Schema, because class Filament\\Forms\\Form is not available'", "0", "['type' => 64, 'message' => 'Could not check compatibility between App\\Filament\\Resources\\DiscountCodes\\DiscountCodeResource::form(Filament\\Forms\\Form $form): Filament\\Forms\\Form and Filament\\Resources\\Resource::form(Filament\\Schemas\\Schema $schema): Filament\\Schemas\\Schema, because class Filament\\Forms\\Form is not available', 'file' => 'C:\\wamp64\\www\\e-course_delta\\platform\\app\\Filament\\Resources\\DiscountCodes\\DiscountCodeResource.php', 'line' => 28]", "0", "???", "???")
+
+  2   vendor\laravel\framework\src\Illuminate\Foundation\Bootstrap\HandleExceptions.php:234
+      Illuminate\Foundation\Bootstrap\HandleExceptions::fatalErrorFromPhpError("['type' => 64, 'message' => 'Could not check compatibility between App\\Filament\\Resources\\DiscountCodes\\DiscountCodeResource::form(Filament\\Forms\\Form $form): Filament\\Forms\\Form and Filament\\Resources\\Resource::form(Filament\\Schemas\\Schema $schema): Filament\\Schemas\\Schema, because class Filament\\Forms\\Form is not available', 'file' => 'C:\\wamp64\\www\\e-course_delta\\platform\\app\\Filament\\Resources\\DiscountCodes\\DiscountCodeResource.php', 'line' => 28]", "0")
+
+
+   Whoops\Exception\ErrorException 
+
+  Could not check compatibility between App\Filament\Resources\DiscountCodes\DiscountCodeResource::form(Filament\Forms\Form $form): Filament\Forms\Form and Filament\Resources\Resource::form(Filament\Schemas\Schema $schema): Filament\Schemas\Schema, because class Filament\Forms\Form is not available
+
+  at app\Filament\Resources\DiscountCodes\DiscountCodeResource.php:28
+     24???     protected static ?string $pluralModelLabel = 'Daftar Kode Diskon';
+     25???     protected static string|\UnitEnum|null $navigationGroup = 'Manajemen Event';
+     26???     protected static ?int $navigationSort = 3;
+     27??? 
+  ???  28???     public static function form(Form $form): Form
+     29???     {
+     30???         return $form
+     31???             ->schema([
+     32???                 Forms\Components\TextInput::make('code')
+
+  1   vendor\filp\whoops\src\Whoops\Run.php:520
+      Whoops\Run::handleError("Could not check compatibility between App\Filament\Resources\DiscountCodes\DiscountCodeResource::form(Filament\Forms\Form $form): Filament\Forms\Form and Filament\Resources\Resource::form(Filament\Schemas\Schema $schema): Filament\Schemas\Schema, because class Filament\Forms\Form is not available", "C:\wamp64\www\e-course_delta\platform\app\Filament\Resources\DiscountCodes\DiscountCodeResource.php")
+
+  2   [internal]:0
+      Whoops\Run::handleShutdown()
+

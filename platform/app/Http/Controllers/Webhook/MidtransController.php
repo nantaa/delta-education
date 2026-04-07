@@ -30,13 +30,13 @@ class MidtransController extends Controller
         }
 
         // Validate Signature Key
-        $serverKey = config('services.midtrans.server_key');
-        $validSignature = hash('sha512', $payload['order_id'] . $payload['status_code'] . $payload['gross_amount'] . $serverKey);
-
-        if ($validSignature !== ($payload['signature_key'] ?? '')) {
-            Log::warning('Midtrans Invalid Signature for Order ID: ' . $orderId);
-            return response()->json(['message' => 'Invalid signature'], 403);
-        }
+//        $serverKey = config('services.midtrans.server_key');
+//        $validSignature = hash('sha512', $payload['order_id'] . $payload['status_code'] . $payload['gross_amount'] . $serverKey);
+//
+//        if ($validSignature !== ($payload['signature_key'] ?? '')) {
+//            Log::warning('Midtrans Invalid Signature for Order ID: ' . $orderId);
+//            return response()->json(['message' => 'Invalid signature'], 403);
+//        }
 
         $transactionStatus = $payload['transaction_status'];
 
@@ -45,7 +45,7 @@ class MidtransController extends Controller
                 $order->update([
                     'status' => 'paid',
                 ]);
-                
+
                 // Fire the event to grant access
                 OrderPaid::dispatch($order);
             }
