@@ -15,8 +15,8 @@
                 @forelse($trainings as $training)
                 <div class="flex flex-col rounded-md border border-[#e3e3e0] bg-white overflow-hidden hover:border-[#1915014a] hover:shadow-sm transition-all duration-150">
 
-                    {{-- Poster Thumbnail --}}
-                    <div class="aspect-video bg-[#f5f5f3] flex items-center justify-center overflow-hidden">
+                    {{-- Poster Thumbnail (Vertical Flyer Ratio) --}}
+                    <div class="aspect-[3/4] bg-[#f5f5f3] flex items-center justify-center overflow-hidden">
                         @if($training->poster)
                             <img src="{{ Storage::url($training->poster) }}"
                                  alt="Poster {{ $training->title }}"

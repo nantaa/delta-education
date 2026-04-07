@@ -10,8 +10,8 @@
             <span class="text-[#1b1b18]">{{ $training->title }}</span>
         </nav>
 
-        {{-- Poster Image --}}
-        <div class="mb-8 rounded-md border border-[#e3e3e0] overflow-hidden aspect-video bg-[#f5f5f3] flex items-center justify-center">
+        {{-- Poster Image (Vertical Ratio) --}}
+        <div class="mb-8 rounded-md border border-[#e3e3e0] overflow-hidden aspect-[3/4] bg-[#f5f5f3] flex items-center justify-center">
             @if($training->poster)
                 <img src="{{ Storage::url($training->poster) }}"
                      alt="Poster {{ $training->title }}"
