@@ -45,12 +45,12 @@
 
                 <div class="flex items-center gap-2">
                     @auth
-                        <a href="{{ route('dashboard') }}"
+                        <a href="/admin"
                            class="inline-block rounded-sm border border-[#19140035] px-4 py-1.5 text-xs font-medium text-[#1b1b18] hover:border-[#1915014a] transition-colors">
                             Dashboard
                         </a>
                     @else
-                        <a href="{{ route('login') }}"
+                        <a href="/admin/login"
                            class="inline-block px-4 py-1.5 text-xs font-medium text-[#706f6c] hover:text-[#1b1b18] transition-colors">
                             Masuk
                         </a>
