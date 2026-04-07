@@ -26,8 +26,18 @@
                     </svg>
                 </div>
                 <h2 class="text-base font-semibold text-[#1b1b18] mb-2">Pendaftaran berhasil!</h2>
-                <p class="text-sm text-[#706f6c]">Terima kasih. Cek email dan WhatsApp Anda untuk informasi selanjutnya.</p>
-                <a href="{{ route('home') }}" class="mt-6 inline-block text-xs text-[#706f6c] underline underline-offset-4 hover:text-[#1b1b18] transition-colors">
+                <p class="text-sm text-[#706f6c] mb-6">Terima kasih. Cek email dan WhatsApp Anda untuk informasi selanjutnya.</p>
+                
+                @if(isset($purchasable->zoom_link) && $purchasable->zoom_link)
+                    <div class="mb-4 text-center">
+                        <a href="{{ $purchasable->zoom_link }}" target="_blank" class="inline-flex items-center gap-2 bg-[#1b1b18] text-white px-5 py-2.5 rounded-sm font-medium hover:bg-black transition-colors w-full sm:w-auto">
+                            <svg class="h-4 w-4 fill-current" viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
+                            Buka Link Kegiatan
+                        </a>
+                    </div>
+                @endif
+
+                <a href="{{ route('home') }}" class="mt-2 inline-block text-xs text-[#706f6c] underline underline-offset-4 hover:text-[#1b1b18] transition-colors">
                     Kembali ke beranda
                 </a>
             </div>
@@ -201,14 +211,14 @@
 </div>
 
 @script
-<script>
-    $wire.on('open-snap', (data) => {
-        window.snap.pay(data.token, {
-            onSuccess: function(){ @this.set('success', true); },
-            onPending: function(){ alert('Menunggu pembayaran...'); },
-            onError: function(){ alert('Pembayaran gagal. Silakan coba lagi.'); },
-            onClose: function(){ console.log('Midtrans popup closed'); }
+    <script>
+        $wire.on('open-snap', (data) => {
+            window.snap.pay(data.token, {
+                onSuccess: function(){ @this.set('success', true); },
+                onPending: function(){ window.location.href = '/order/' + @this.createdOrderId; },
+                onError: function(){ alert('Midtrans membatalkan pembayaran Anda.'); },
+                onClose: function(){ window.location.href = '/order/' + @this.createdOrderId; }
+            });
         });
-    });
-</script>
+    </script>
 @endscript

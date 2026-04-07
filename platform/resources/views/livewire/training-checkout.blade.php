@@ -162,9 +162,9 @@
             let token = Array.isArray(data) ? data[0].token : data.token;
             window.snap.pay(token, {
                 onSuccess: function() { @this.call('handlePaymentSuccess'); },
-                onPending: function() { @this.call('handlePaymentSuccess'); },
-                onError: function() { alert("Pembayaran gagal!"); },
-                onClose: function() { alert('Anda menutup popup sebelum menyelesaikan pembayaran'); }
+                onPending: function() { window.location.href = '/order/' + @this.createdOrderId; },
+                onError: function() { alert('Midtrans membatalkan pembayaran Anda.'); },
+                onClose: function() { window.location.href = '/order/' + @this.createdOrderId; }
             });
         });
     </script>

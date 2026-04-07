@@ -7,9 +7,11 @@ Route::get('/', \App\Livewire\LandingPage::class)->name('home');
 
 Route::get('/webinars', \App\Livewire\Webinars\Index::class)->name('webinars.index');
 Route::get('/webinars/{slug}', \App\Livewire\Webinars\Show::class)->name('webinars.show');
+Route::get('/pelatihan', \App\Livewire\TrainingsIndex::class)->name('trainings.index');
 Route::get('/pelatihan/{slug}', \App\Livewire\TrainingsShow::class)->name('trainings.show');
 Route::get('/checkout/pelatihan/{slug}', \App\Livewire\TrainingCheckout::class)->name('checkout.training');
 Route::get('/checkout/{type}/{slug}', \App\Livewire\Checkout::class)->name('checkout');
+Route::get('/order/{order_id}', \App\Livewire\OrderStatus::class)->name('order.status');
 
 Route::post('/webhook/midtrans', [\App\Http\Controllers\Webhook\MidtransController::class, 'handle']);
 

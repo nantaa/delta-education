@@ -30,6 +30,7 @@ class TrainingCheckout extends Component
     public ?string $snapToken = null;
     public bool $isFree = false;
     public bool $success = false;
+    public $createdOrderId;
 
     public float $effectivePrice = 0;
     public float $originalPrice  = 0;
@@ -164,6 +165,8 @@ class TrainingCheckout extends Component
         ]);
 
         $participant->update(['transaction_id' => (string) $order->id]);
+        
+        $this->createdOrderId = $order->id;
 
         $paymentGateway = new PaymentGatewayService();
         $snapToken = $paymentGateway->getSnapToken($order);

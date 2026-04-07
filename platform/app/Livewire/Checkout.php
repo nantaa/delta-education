@@ -127,6 +127,10 @@ class Checkout extends Component
             'price' => $this->purchasable->price,
         ]);
 
+        $participant->update(['transaction_id' => (string) $order->id]);
+        
+        $this->createdOrderId = $order->id;
+
         $this->snapToken = $paymentService->getSnapToken($order);
         
         if ($this->snapToken) {

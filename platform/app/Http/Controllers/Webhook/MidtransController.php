@@ -45,12 +45,14 @@ class MidtransController extends Controller
                 $order->update([
                     'status' => 'paid',
                 ]);
+                \App\Models\Participant::where('transaction_id', $order->id)->update(['payment_status' => 'paid']);
 
                 // Fire the event to grant access
                 OrderPaid::dispatch($order);
             }
         } elseif ($transactionStatus == 'cancel' || $transactionStatus == 'deny' || $transactionStatus == 'expire') {
             $order->update(['status' => 'failed']);
+            \App\Models\Participant::where('transaction_id', $order->id)->update(['payment_status' => 'failed']);
         }
 
         return response()->json(['message' => 'Webhook processed']);

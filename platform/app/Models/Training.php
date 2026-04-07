@@ -19,6 +19,7 @@ class Training extends Model
         'poster',
         'status',
         'location',
+        'link_forwarder',
     ];
 
     protected $casts = [

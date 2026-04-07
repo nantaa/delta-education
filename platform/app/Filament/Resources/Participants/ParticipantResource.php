@@ -64,7 +64,7 @@ class ParticipantResource extends Resource
         return $schema->components([
 
             // ── Section 1: Event & Registration ───────────────────────────
-            \Filament\Forms\Components\Section::make('Informasi Kegiatan')
+            \Filament\Schemas\Components\Section::make('Informasi Kegiatan')
                 ->schema([
                     \Filament\Forms\Components\MorphToSelect::make('participatable')
                         ->label('Terdaftar Pada')
