@@ -6,7 +6,7 @@
             <p class="text-[#706f6c] text-sm">Amankan masa depan karir Anda dengan agenda eksklusif dan pelatihan K3 profesional yang terukur.</p>
         </div>
 
-        @if($trainings->count() === 0)
+        @if($trainings->isEmpty())
             <div class="rounded-md border border-[#e3e3e0] px-8 py-16 text-center text-[#706f6c] text-sm">
                 Belum ada pelatihan K3 yang sedang dibuka. Pantau terus halaman ini.
             </div>
@@ -56,6 +56,10 @@
                         Belum ada Pelatihan K3 terjadwal.
                     </div>
                 @endforelse
+            </div>
+
+            <div class="mt-8">
+                {{ $trainings->links() }}
             </div>
         @endif
     </div>

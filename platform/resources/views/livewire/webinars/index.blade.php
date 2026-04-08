@@ -6,7 +6,7 @@
             <p class="text-[#706f6c] text-sm">Jelajahi jadwal webinar dan daftarkan dirimu sebelum tempat penuh.</p>
         </div>
 
-        @if($webinars->count() === 0)
+        @if($webinars->isEmpty())
             <div class="rounded-md border border-[#e3e3e0] px-8 py-16 text-center text-[#706f6c] text-sm">
                 Belum ada webinar terjadwal. Pantau terus halaman ini.
             </div>
@@ -56,6 +56,10 @@
                         Belum ada webinar terjadwal.
                     </div>
                 @endforelse
+            </div>
+
+            <div class="mt-8">
+                {{ $webinars->links() }}
             </div>
         @endif
     </div>

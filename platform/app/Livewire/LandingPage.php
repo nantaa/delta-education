@@ -17,12 +17,14 @@ class LandingPage extends Component
             ->where('status', 'published')
             ->where('scheduled_at', '>=', now())
             ->orderBy('scheduled_at')
+            ->take(6)
             ->get();
 
         $this->trainings = \App\Models\Training::query()
             ->where('status', 'published')
             ->where('scheduled_at', '>=', now())
             ->orderBy('scheduled_at')
+            ->take(6)
             ->get();
     }
 
